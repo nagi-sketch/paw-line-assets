@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>体験レッスンのご予約｜Paw</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* Paw の体験予約ページ（LINEから開く）。2026-11-12 キズナCEO。色はリッチメニュー・paw-fit.jp と同じ */
+:root { --accent: #BE6D55; --soft: #FBEFEA; --cream: #FFFAE8; --ink: #2E2E2E; --gray: #8A817C; --line: #EADFD8; --bg: #FFFFFF; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif; font-size: 16px; line-height: 1.7;
+  -webkit-text-size-adjust: 100%; }
+.wrap { max-width: 480px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
+h1 { font-size: 20px; margin: 2px 0 2px; }
+.shop { font-size: 13px; color: var(--accent); font-weight: 700; letter-spacing: .04em; }
+.sub { font-size: 14px; color: var(--gray); }
+section { margin-top: 22px; }
+h2 { font-size: 15px; margin: 0 0 8px; display: flex; gap: 8px; align-items: center; }
+h2 .n { background: var(--accent); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
+.hint { font-size: 13px; color: var(--gray); margin: -2px 0 8px; }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal .w { text-align: center; font-size: 12px; color: var(--gray); }
+.cal .w.sat { color: #4A78B5; } .cal .w.sun { color: #C0504D; }
+.cal button { font: inherit; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 6px 0 4px; min-height: 52px;
+  display: flex; flex-direction: column; align-items: center; gap: 0; color: var(--ink); }
+.cal button .d { font-size: 15px; font-weight: 500; line-height: 1.3; }
+.cal button .c { font-size: 10.5px; color: var(--accent); line-height: 1.2; }
+.cal button.fit { background: var(--soft); border-color: #E9C9BC; }
+.cal button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cal button.sel .c { color: #fff; }
+.cal button:disabled { background: #F6F4F2; color: #C9C2BD; border-color: #F0ECE8; }
+.cal button:disabled .c { color: transparent; }
+.mon { font-size: 13px; color: var(--gray); margin: 10px 0 4px; }
+.times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.times button { font: inherit; font-size: 16px; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 10px 0; color: var(--ink); position: relative; }
+.times button.fit::after { content: "ご希望"; position: absolute; top: -8px; right: 6px; font-size: 10px; background: var(--accent); color: #fff; border-radius: 999px; padding: 0 6px; line-height: 16px; }
+.times button.sel { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.empty { font-size: 14px; color: var(--gray); background: #F8F5F2; border-radius: 10px; padding: 12px; }
+label { display: block; font-size: 14px; font-weight: 500; margin: 12px 0 6px; }
+input, select { font: inherit; font-size: 16px; width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; background: #fff; color: var(--ink); }
+input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; outline-offset: 1px; }
+.pick { background: var(--cream); border-radius: 12px; padding: 12px 14px; font-size: 15px; }
+.pick b { font-size: 17px; }
+.go { font: inherit; font-size: 17px; font-weight: 700; width: 100%; border: 0; border-radius: 12px; padding: 14px; background: var(--accent); color: #fff; margin-top: 16px; }
+.go:disabled { background: #D9CFC9; }
+.small { font-size: 12.5px; color: var(--gray); margin-top: 8px; }
+.msg { border-radius: 12px; padding: 14px; font-size: 15px; margin-top: 14px; }
+.msg.err { background: #FDF0EE; color: #A23B2A; }
+.done { text-align: center; padding: 40px 8px; }
+.done .ok { font-size: 44px; }
+.done h1 { margin-top: 6px; }
+.done .when { font-size: 18px; font-weight: 700; margin: 12px 0; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div id="main">
+    <div class="shop" id="shop">Paw</div>
+    <h1>体験レッスンのご予約</h1>
+    <p class="sub" id="lead">日時を選んで、お名前を入れるだけです。</p>
+    <div class="msg err" id="err" hidden></div>
+
+    <section id="s1">
+      <h2><span class="n">1</span>日にちを選ぶ</h2>
+      <p class="hint" id="zoneHint" hidden></p>
+      <div id="cal"></div>
+    </section>
+
+    <section id="s2">
+      <h2><span class="n">2</span>時間を選ぶ</h2>
+      <div class="times" id="times"></div>
+    </section>
+
+    <section id="s3">
+      <h2><span class="n">3</span>お名前と、Pawを知ったきっかけ</h2>
+      <label for="name">お名前（フルネーム）</label>
+      <input id="name" autocomplete="name" placeholder="例：山田 花子">
+      <label for="src">Pawを最初に知ったきっかけ</label>
+      <select id="src"><option value="">選んでください</option></select>
+      <div id="detailBox" hidden>
+        <label for="detail" id="detailLabel">くわしく</label>
+        <input id="detail">
+      </div>
+    </section>
+
+    <section>
+      <div class="pick" id="pick">日にちと時間を選んでください</div>
+      <button class="go" id="go" type="button" disabled>この内容で申し込む</button>
+      <p class="small" id="note"></p>
+    </section>
+  </div>
+
+  <div class="done" id="done" hidden>
+    <div class="ok">🌿</div>
+    <h1>お申し込みを受け付けました</h1>
+    <p class="when" id="doneWhen"></p>
+    <p>スタッフが確認して、<br>LINEでお知らせします。</p>
+    <p class="small">この画面を閉じて、LINEにお戻りください。</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var q = {};
+  location.search.slice(1).split('&').forEach(function (kv) { if (!kv) return; var i = kv.indexOf('='); q[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); });
+  var WEEK = ['日', '月', '火', '水', '木', '金', '土'];
+  var ZONES = [
+    { label: '週末', fit: function (s) { var w = wd(s.ds); return w === 0 || w === 6; } },
+    { label: '仕事終わりの夜', fit: function (s) { return +s.hm.slice(0, 2) >= 18; } },
+    { label: '平日の昼間〜夕方', fit: function (s) { var w = wd(s.ds); return w !== 0 && w !== 6 && +s.hm.slice(0, 2) < 18; } }
+  ];
+  var zone = q.z !== undefined && ZONES[+q.z] ? ZONES[+q.z] : null;
+  var data = null, day = null, slot = null, logged = false;
+  var $ = function (id) { return document.getElementById(id); };
+  function wd(ds) { var p = ds.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay(); }
+  function label(ds) { var p = ds.split('-'); return (+p[1]) + '月' + (+p[2]) + '日（' + WEEK[wd(ds)] + '）'; }
+  function auth() { return 's=' + encodeURIComponent(q.s || '') + '&u=' + encodeURIComponent(q.u || '') + '&e=' + encodeURIComponent(q.e || '') + '&g=' + encodeURIComponent(q.g || ''); }
+  function showErr(t) { $('err').textContent = t; $('err').hidden = !t; if (t) window.scrollTo(0, 0); }
+  var MSG = {
+    expired: 'このページの期限が切れました。LINEに戻って、もう一度「体験を予約する」を押してください。',
+    bad: 'ページを開けませんでした。LINEに戻って、もう一度「体験を予約する」を押してください。',
+    net: 'つながりにくくなっています。少し待ってから、もう一度お試しください。'
+  };
+
+  function load(keep) {
+    if (q.demo) return render(DEMO, keep);
+    fetch(q.api + '?api=slots&' + auth()).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.ok) { showErr(MSG[d.err] || MSG.bad); hideForm(); return; }
+      render(d, keep);
+    }).catch(function () { showErr(MSG.net); });
+  }
+  function hideForm() { ['s1', 's2', 's3'].forEach(function (id) { $(id).hidden = true; }); $('go').hidden = true; $('pick').hidden = true; }
+
+  function render(d, keep) {
+    data = d;
+    $('shop').textContent = d.name;
+    $('note').textContent = '体験は約' + d.minutes + '分です。スタッフがいるのは' + d.staff + 'です。';
+    if (d.mine) {
+      showErr('');
+      $('lead').textContent = 'すでにお申し込みがあります：' + label(d.mine.ds) + ' ' + d.mine.hm + '〜。日時を変えたいときは、LINEのトークでスタッフにお知らせください。';
+      hideForm(); return;
+    }
+    if ($('src').options.length === 1) d.sources.forEach(function (t, i) { var o = document.createElement('option'); o.value = i; o.textContent = t; $('src').appendChild(o); });
+    var byDay = {};
+    d.slots.forEach(function (s) { (byDay[s.ds] = byDay[s.ds] || []).push(s); });
+    data.byDay = byDay;
+    var days = Object.keys(byDay).sort();
+    if (!days.length) { $('cal').innerHTML = '<p class="empty">いま空いている日時がありません。LINEのトークでスタッフにご相談ください。</p>'; $('times').innerHTML = ''; return; }
+    if (zone) { $('zoneHint').hidden = false; $('zoneHint').textContent = 'ご希望（' + zone.label + '）に合う日に色をつけています。'; }
+    if (!keep || !byDay[day]) {
+      day = days[0];
+      if (zone) { for (var i = 0; i < days.length; i++) if (byDay[days[i]].some(zone.fit)) { day = days[i]; break; } }
+      slot = null;
+    }
+    drawCal(days[0], days[days.length - 1]);
+    drawTimes();
+    update();
+  }
+
+  function drawCal(first, last) {
+    var p = first.split('-'), start = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+    start.setUTCDate(start.getUTCDate() - ((start.getUTCDay() + 6) % 7));   // 月曜はじまり
+    var p2 = last.split('-'), end = new Date(Date.UTC(+p2[0], +p2[1] - 1, +p2[2]));
+    var h = '', mon = -1, cur = new Date(start);
+    while (cur <= end || (cur.getUTCDay() + 6) % 7 !== 0) {
+      if ((cur.getUTCDay() + 6) % 7 === 0) {
+        var m = cur.getUTCMonth();
+        var endW = new Date(cur); endW.setUTCDate(endW.getUTCDate() + 6);
+        if (m !== mon || endW.getUTCMonth() !== m) {
+          if (h) h += '</div>';
+          var mm = mon === -1 ? m : endW.getUTCMonth(); mon = mm;
+          h += '<p class="mon">' + (mm + 1) + '月</p><div class="cal">' + ['月', '火', '水', '木', '金', '土', '日'].map(function (w, i) { return '<span class="w' + (i === 5 ? ' sat' : i === 6 ? ' sun' : '') + '">' + w + '</span>'; }).join('');
+        }
+      }
+      var ds = cur.toISOString().slice(0, 10), list = data.byDay[ds] || [];
+      var fit = zone && list.some(zone.fit);
+      h += '<button type="button" data-d="' + ds + '"' + (list.length ? '' : ' disabled') + ' class="' + (ds === day ? 'sel' : fit ? 'fit' : '') + '" aria-label="' + label(ds) + (list.length ? ' ' + list.length + '枠' : ' 空きなし') + '">' +
+        '<span class="d">' + cur.getUTCDate() + '</span><span class="c">' + (list.length ? '○' + list.length : '') + '</span></button>';
+      cur.setUTCDate(cur.getUTCDate() + 1);
+      if (cur > end && (cur.getUTCDay() + 6) % 7 === 0) break;
+    }
+    $('cal').innerHTML = h + '</div>';
+    Array.prototype.forEach.call($('cal').querySelectorAll('button[data-d]'), function (b) {
+      b.addEventListener('click', function () { day = b.getAttribute('data-d'); slot = null; drawCal(first, last); drawTimes(); update(); $('s2').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    });
+  }
+
+  function drawTimes() {
+    var list = data.byDay[day] || [];
+    $('times').innerHTML = list.map(function (s) {
+      return '<button type="button" data-id="' + s.id + '" class="' + (slot && slot.id === s.id ? 'sel' : zone && zone.fit(s) ? 'fit' : '') + '">' + s.hm + '</button>';
+    }).join('');
+    Array.prototype.forEach.call($('times').querySelectorAll('button'), function (b) {
+      b.addEventListener('click', function () {
+        slot = list.filter(function (s) { return s.id === b.getAttribute('data-id'); })[0];
+        drawTimes(); update();
+        if (!logged && !q.demo) { logged = true; fetch(q.api + '?api=log&ev=pick&' + auth()).catch(function () {}); }
+      });
+    });
+  }
+
+  function srcIndex() { return $('src').value === '' ? -1 : +$('src').value; }
+  function update() {
+    var i = srcIndex();
+    var needDetail = data && (i === data.ref || i === data.other);
+    $('detailBox').hidden = !needDetail;
+    if (needDetail) $('detailLabel').textContent = i === data.ref ? 'ご紹介者のお名前（わかれば）' : 'くわしく（任意）';
+    $('pick').innerHTML = slot ? 'お申し込みの日時<br><b>' + label(slot.ds) + ' ' + slot.hm + '〜</b>' : (day ? label(day) + '：時間を選んでください' : '日にちと時間を選んでください');
+    $('go').disabled = !(slot && $('name').value.trim() && i >= 0);
+  }
+  $('name').addEventListener('input', update);
+  $('src').addEventListener('change', update);
+
+  $('go').addEventListener('click', function () {
+    var go = $('go'); go.disabled = true; go.textContent = '送っています…'; showErr('');
+    var body = { s: q.s, u: q.u, e: q.e, g: q.g, slot: slot.id, name: $('name').value.trim(), src: srcIndex(), detail: $('detail').value.trim() };
+    var done = function (d) {
+      go.textContent = 'この内容で申し込む';
+      if (d.ok) { $('main').hidden = true; $('done').hidden = false; $('doneWhen').textContent = d.label; window.scrollTo(0, 0); return; }
+      if (d.err === 'taken') { showErr('申し訳ありません。この日時は、ちょうど埋まってしまいました。ほかの日時を選んでください。'); slot = null; load(true); return; }
+      if (d.err === 'already') { showErr('すでにお申し込みがあります：' + label(d.ds) + ' ' + d.hm + '〜。'); hideForm(); return; }
+      showErr(MSG[d.err] || '送れませんでした。入力を確かめて、もう一度お試しください。'); update();
+    };
+    if (q.demo) return done({ ok: true, label: label(slot.ds) + ' ' + slot.hm + '〜' });
+    fetch(q.api + '?api=book', { method: 'POST', body: JSON.stringify(body) }).then(function (r) { return r.json(); }).then(done)
+      .catch(function () { go.textContent = 'この内容で申し込む'; showErr(MSG.net); update(); });
+  });
+
+  // 見本の表示（?demo=1）。本番では使わない
+  var DEMO = null;
+  if (q.demo) {
+    var base = new Date(), slots = [];
+    var T = { 1: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '17:00'], 2: ['10:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'], 3: ['14:00'],
+      4: ['13:00', '14:00', '15:00', '17:00', '18:00', '20:00'], 5: ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00'], 6: ['14:00', '15:00', '16:00', '17:00', '18:00', '20:00'], 0: ['13:00', '14:00', '15:00', '16:00'] };
+    for (var n = 1; n <= 14; n++) { var dd = new Date(base.getTime() + n * 86400000), ds = dd.toISOString().slice(0, 10); (T[dd.getDay()] || []).forEach(function (hm) { slots.push({ id: ds.replace(/-/g, '') + hm.replace(':', '') + 'e', ds: ds, hm: hm }); }); }
+    DEMO = { ok: true, name: 'Paw mini 八王子', minutes: 45, staff: '9〜21時（曜日により異なります）', slots: slots, ref: 9, other: 12,
+      sources: ['Instagramの広告（「広告」と表示された投稿）', 'InstagramのPaw公式アカウント（投稿・ストーリーズ・フォローしていた）', 'Instagramでスタッフや知り合いの投稿を見て', 'TikTok', 'Googleで検索', 'Googleマップ', 'お店の看板・外観を見て', 'ポストに届いたチラシ', 'お店・施設に置いてあるチラシ', '友人・家族・会員からの紹介', '職場・団体からの案内', '以前Pawに通っていた', 'その他'] };
+  }
+  load(false);
+  if (q.demo === 'filled') setTimeout(function () { var b = $('times').querySelector('button'); if (b) b.click(); $('name').value = '山田 花子'; $('src').value = '4'; update(); }, 300);
+})();
+</script>
+</body>
+</html>
