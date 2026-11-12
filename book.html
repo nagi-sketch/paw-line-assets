@@ -99,14 +99,23 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
     <h1>お申し込みを受け付けました</h1>
     <p class="when" id="doneWhen"></p>
     <p>スタッフが確認して、<br>LINEでお知らせします。</p>
-    <p class="small">この画面を閉じて、LINEにお戻りください。</p>
+    <p class="small" id="closeNote">この画面を閉じて、LINEにお戻りください。</p>
+    <button class="go" id="close" type="button" hidden>LINEに戻る</button>
   </div>
 </div>
 
+<!-- LIFF（LINEの画面の上に重ねて開く）。LIFFで開いていないときは何もしない -->
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
 (function () {
   var q = {};
-  location.search.slice(1).split('&').forEach(function (kv) { if (!kv) return; var i = kv.indexOf('='); q[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); });
+  function readQuery(str) {
+    str.replace(/^[^?]*\?/, '').split('&').forEach(function (kv) { if (!kv) return; var i = kv.indexOf('='); if (i < 0) return; q[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); });
+  }
+  readQuery(location.search);
+  // LIFFで開いたとき、最初はURLが「liff.state=（元の?s=…）」の形で届く。中身も読む
+  if (q['liff.state']) readQuery(q['liff.state']);
+  var LIFF = !!(q.l && window.liff), idToken = '';
   var WEEK = ['日', '月', '火', '水', '木', '金', '土'];
   var ZONES = [
     { label: '週末', fit: function (s) { var w = wd(s.ds); return w === 0 || w === 6; } },
@@ -118,7 +127,10 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
   var $ = function (id) { return document.getElementById(id); };
   function wd(ds) { var p = ds.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay(); }
   function label(ds) { var p = ds.split('-'); return (+p[1]) + '月' + (+p[2]) + '日（' + WEEK[wd(ds)] + '）'; }
-  function auth() { return 's=' + encodeURIComponent(q.s || '') + '&u=' + encodeURIComponent(q.u || '') + '&e=' + encodeURIComponent(q.e || '') + '&g=' + encodeURIComponent(q.g || ''); }
+  function auth() {
+    if (LIFF) return 's=' + encodeURIComponent(q.s || '') + (idToken ? '&t=' + encodeURIComponent(idToken) : '');
+    return 's=' + encodeURIComponent(q.s || '') + '&u=' + encodeURIComponent(q.u || '') + '&e=' + encodeURIComponent(q.e || '') + '&g=' + encodeURIComponent(q.g || '');
+  }
   function showErr(t) { $('err').textContent = t; $('err').hidden = !t; if (t) window.scrollTo(0, 0); }
   var MSG = {
     expired: 'このページの期限が切れました。LINEに戻って、もう一度「体験を予約する」を押してください。',
@@ -154,6 +166,18 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
     if (q.demo) return render(DEMO, keep);
     var quick = !keep && fromUrl();
     if (quick) { pending = true; render(quick, false); }
+    // LIFF：メニューから開いたとき（URLに空きが無い）は、だれでも読める空きを先に描き、LINEのログインを待つ間に見せる
+    if (LIFF && !idToken) {
+      pending = true;
+      if (!quick) fetch(q.api + '?api=slots&s=' + encodeURIComponent(q.s || '')).then(function (r) { return r.json(); })
+        .then(function (d) { if (d.ok && !idToken) render(d, false); }).catch(function () {});
+      liff.init({ liffId: q.l }).then(function () {
+        if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
+        idToken = liff.getIDToken() || '';
+        load(true);
+      }).catch(function () { pending = false; update(); showErr(MSG.bad); });
+      return;
+    }
     fetch(q.api + '?api=slots&' + auth()).then(function (r) { return r.json(); }).then(function (d) {
       pending = false;
       if (!d.ok) { showErr(MSG[d.err] || MSG.bad); hideForm(); return; }
@@ -250,10 +274,16 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
 
   $('go').addEventListener('click', function () {
     var go = $('go'); go.disabled = true; go.textContent = '送っています…'; showErr('');
-    var body = { s: q.s, u: q.u, e: q.e, g: q.g, slot: slot.id, name: $('name').value.trim(), src: srcIndex(), detail: $('detail').value.trim() };
+    var body = LIFF ? { s: q.s, t: idToken } : { s: q.s, u: q.u, e: q.e, g: q.g };
+    body.slot = slot.id; body.name = $('name').value.trim(); body.src = srcIndex(); body.detail = $('detail').value.trim();
     var done = function (d) {
       go.textContent = 'この内容で申し込む';
-      if (d.ok) { $('main').hidden = true; $('done').hidden = false; $('doneWhen').textContent = d.label; window.scrollTo(0, 0); return; }
+      if (d.ok) {
+        $('main').hidden = true; $('done').hidden = false; $('doneWhen').textContent = d.label; window.scrollTo(0, 0);
+        // LIFFなら「LINEに戻る」で画面を閉じられる
+        if (LIFF && liff.isInClient && liff.isInClient()) { $('closeNote').hidden = true; $('close').hidden = false; $('close').onclick = function () { liff.closeWindow(); }; }
+        return;
+      }
       if (d.err === 'taken') { showErr('申し訳ありません。この日時は、ちょうど埋まってしまいました。ほかの日時を選んでください。'); slot = null; load(true); return; }
       if (d.err === 'already') { showErr('すでにお申し込みがあります：' + label(d.ds) + ' ' + d.hm + '〜。'); hideForm(); return; }
       showErr(MSG[d.err] || '送れませんでした。入力を確かめて、もう一度お試しください。'); update();
