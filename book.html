@@ -126,12 +126,44 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
     net: 'つながりにくくなっています。少し待ってから、もう一度お試しください。'
   };
 
+  // 2026-11-12：開いた瞬間に描く。LINEのボタンのURLに入れた空き（d・v）と、店ごとの決まった情報で先に描き、
+  // 裏で最新の空きを読み直して差し替える（読み直すまで「申し込む」は押せない）
+  var SHOPS = {
+    okyozuka: { name: 'Paw 御経塚', minutes: 45, staff: '平日10〜18時、土日祝9〜17時' },
+    hachioji: { name: 'Paw mini 八王子', minutes: 45, staff: '9〜21時（曜日により異なります）' }
+  };
+  var SOURCES = ['Instagramの広告（「広告」と表示された投稿）', 'InstagramのPaw公式アカウント（投稿・ストーリーズ・フォローしていた）', 'Instagramでスタッフや知り合いの投稿を見て', 'TikTok', 'Googleで検索', 'Googleマップ', 'お店の看板・外観を見て', 'ポストに届いたチラシ', 'お店・施設に置いてあるチラシ', '友人・家族・会員からの紹介', '職場・団体からの案内', '以前Pawに通っていた', 'その他'];
+  var pending = false;
+  function fromUrl() {
+    var sh = SHOPS[q.s];
+    if (!sh || !/^\d{8}$/.test(q.d || '') || !/^[0-9a-f]+$/.test(q.v || '')) return null;
+    var base = Date.UTC(+q.d.slice(0, 4), +q.d.slice(4, 6) - 1, +q.d.slice(6, 8)), slots = [];
+    var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 日本の今日
+    for (var i = 0; i * 8 < q.v.length; i++) {
+      var bits = parseInt(q.v.slice(i * 8, i * 8 + 8), 16), ds = new Date(base + i * 86400000).toISOString().slice(0, 10);
+      if (ds <= today) continue;   // 古いURLの、もう過ぎた日は出さない
+      for (var j = 0; j < 32; j++) if (bits & (1 << j)) {
+        var m = 360 + j * 30, hm = ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + m % 60).slice(-2);
+        slots.push({ id: ds.replace(/-/g, '') + hm.replace(':', '') + 'e', ds: ds, hm: hm });
+      }
+    }
+    return { ok: true, name: sh.name, minutes: sh.minutes, staff: sh.staff, slots: slots, sources: SOURCES, ref: 9, other: 12, mine: null };
+  }
+
   function load(keep) {
     if (q.demo) return render(DEMO, keep);
+    var quick = !keep && fromUrl();
+    if (quick) { pending = true; render(quick, false); }
     fetch(q.api + '?api=slots&' + auth()).then(function (r) { return r.json(); }).then(function (d) {
+      pending = false;
       if (!d.ok) { showErr(MSG[d.err] || MSG.bad); hideForm(); return; }
-      render(d, keep);
-    }).catch(function () { showErr(MSG.net); });
+      var had = slot;
+      render(d, keep || !!quick);
+      if (had && !(data.byDay[had.ds] || []).some(function (x) { return x.id === had.id; })) {
+        slot = null; drawTimes(); update();
+        showErr('選んでいた時間は、ちょうど埋まりました。ほかの時間を選んでください。');
+      }
+    }).catch(function () { pending = false; update(); showErr(MSG.net); });
   }
   function hideForm() { ['s1', 's2', 's3'].forEach(function (id) { $(id).hidden = true; }); $('go').hidden = true; $('pick').hidden = true; }
 
@@ -210,7 +242,8 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
     $('detailBox').hidden = !needDetail;
     if (needDetail) $('detailLabel').textContent = i === data.ref ? 'ご紹介者のお名前（わかれば）' : 'くわしく（任意）';
     $('pick').innerHTML = slot ? 'お申し込みの日時<br><b>' + label(slot.ds) + ' ' + slot.hm + '〜</b>' : (day ? label(day) + '：時間を選んでください' : '日にちと時間を選んでください');
-    $('go').disabled = !(slot && $('name').value.trim() && i >= 0);
+    $('go').disabled = pending || !(slot && $('name').value.trim() && i >= 0);
+    $('go').textContent = pending && slot && $('name').value.trim() && i >= 0 ? '最新の空きを確かめています…' : 'この内容で申し込む';
   }
   $('name').addEventListener('input', update);
   $('src').addEventListener('change', update);
