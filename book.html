@@ -27,7 +27,7 @@ h2 .n { background: var(--accent); color: #fff; border-radius: 50%; width: 22px;
 .cal button { font: inherit; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 6px 0 4px; min-height: 52px;
   display: flex; flex-direction: column; align-items: center; gap: 0; color: var(--ink); }
 .cal button .d { font-size: 15px; font-weight: 500; line-height: 1.3; }
-.cal button .c { font-size: 10.5px; color: var(--accent); line-height: 1.2; }
+.cal button .c { font-size: 12px; color: var(--accent); line-height: 1.2; }
 .cal button.fit { background: var(--soft); border-color: #E9C9BC; }
 .cal button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
 .cal button.sel .c { color: #fff; }
@@ -178,8 +178,8 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
       }
       var ds = cur.toISOString().slice(0, 10), list = data.byDay[ds] || [];
       var fit = zone && list.some(zone.fit);
-      h += '<button type="button" data-d="' + ds + '"' + (list.length ? '' : ' disabled') + ' class="' + (ds === day ? 'sel' : fit ? 'fit' : '') + '" aria-label="' + label(ds) + (list.length ? ' ' + list.length + '枠' : ' 空きなし') + '">' +
-        '<span class="d">' + cur.getUTCDate() + '</span><span class="c">' + (list.length ? '○' + list.length : '') + '</span></button>';
+      h += '<button type="button" data-d="' + ds + '"' + (list.length ? '' : ' disabled') + ' class="' + (ds === day ? 'sel' : fit ? 'fit' : '') + '" aria-label="' + label(ds) + (list.length ? ' 空きあり' : ' 空きなし') + '">' +
+        '<span class="d">' + cur.getUTCDate() + '</span><span class="c">' + (list.length ? '○' : '') + '</span></button>';
       cur.setUTCDate(cur.getUTCDate() + 1);
       if (cur > end && (cur.getUTCDay() + 6) % 7 === 0) break;
     }
