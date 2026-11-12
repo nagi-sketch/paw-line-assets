@@ -38,7 +38,7 @@ h2 .n { background: var(--accent); color: #fff; border-radius: 50%; width: 22px;
 .times button { font: inherit; font-size: 16px; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 10px 0; color: var(--ink); position: relative; }
 .times button.fit::after { content: "ご希望"; position: absolute; top: -8px; right: 6px; font-size: 10px; background: var(--accent); color: #fff; border-radius: 999px; padding: 0 6px; line-height: 16px; }
 .times button.sel { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
-.empty { font-size: 14px; color: var(--gray); background: #F8F5F2; border-radius: 10px; padding: 12px; }
+.empty { font-size: 14px; color: var(--gray); background: #F8F5F2; border-radius: 10px; padding: 12px; grid-column: 1 / -1; margin: 0; }
 label { display: block; font-size: 14px; font-weight: 500; margin: 12px 0 6px; }
 input, select { font: inherit; font-size: 16px; width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; background: #fff; color: var(--ink); }
 input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; outline-offset: 1px; }
@@ -166,6 +166,8 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
     if (q.demo) return render(DEMO, keep);
     var quick = !keep && fromUrl();
     if (quick) { pending = true; render(quick, false); }
+    // 2026-11-12：メニューから開いたとき（URLに空きが無い）は、空きが届くまでの間もカレンダーの枠を先に出す
+    if (!quick && !keep) skeleton();
     // LIFF：メニューから開いたとき（URLに空きが無い）は、だれでも読める空きを先に描き、LINEのログインを待つ間に見せる
     if (LIFF && !idToken) {
       pending = true;
@@ -188,6 +190,18 @@ input:focus, select:focus, button:focus-visible { outline: 3px solid #E9C9BC; ou
         showErr('選んでいた時間は、ちょうど埋まりました。ほかの時間を選んでください。');
       }
     }).catch(function () { pending = false; update(); showErr(MSG.net); });
+  }
+  // 空きが届く前の仮のカレンダー（明日から14日の枠だけ。押せない）
+  function skeleton() {
+    var sh = SHOPS[q.s];
+    if (sh) { $('shop').textContent = sh.name; $('note').textContent = '体験は約' + sh.minutes + '分です。スタッフがいるのは' + sh.staff + 'です。'; }
+    if ($('src').options.length === 1) SOURCES.forEach(function (t, i) { var o = document.createElement('option'); o.value = i; o.textContent = t; $('src').appendChild(o); });
+    var t0 = new Date(Date.now() + 9 * 3600000), first = new Date(Date.UTC(t0.getUTCFullYear(), t0.getUTCMonth(), t0.getUTCDate() + 1));
+    var last = new Date(first.getTime() + 13 * 86400000);
+    data = { byDay: {} };
+    drawCal(first.toISOString().slice(0, 10), last.toISOString().slice(0, 10));
+    $('times').innerHTML = '<p class="empty">空いている日時を確かめています…</p>';
+    pending = true; update();
   }
   function hideForm() { ['s1', 's2', 's3'].forEach(function (id) { $(id).hidden = true; }); $('go').hidden = true; $('pick').hidden = true; }
 
