@@ -50,13 +50,13 @@ h2.big{font-size:25px;font-weight:700;font-style:italic;line-height:1.5;text-ali
 .fv .tg{font-weight:700;font-style:italic;font-size:25px;line-height:1.5;letter-spacing:.02em}
 .fv .tg>span{display:table}
 .fv .tg .t2{color:var(--accent);font-size:27px;margin-top:2px}
-.num{position:relative;height:min(92vw,440px);margin-top:6px}
-.num .one{position:absolute;left:-1%;top:-5%;font-family:var(--jp);font-weight:700;font-size:min(96vw,460px);line-height:.92;color:var(--accent);transform:skewX(-10deg);transform-origin:50% 100%;letter-spacing:-.02em}
+.num{position:relative;height:min(88vw,420px);margin-top:10px}
+.num .one{position:absolute;left:9%;top:3%;z-index:1;font-family:var(--jp);font-weight:700;font-size:min(84vw,400px);line-height:.92;color:var(--accent);transform:skewX(-10deg);transform-origin:50% 100%;letter-spacing:-.02em}
 .num .tsuki,.num .kai{position:absolute;font-weight:700;font-style:italic;color:var(--accent);font-size:min(17vw,82px);line-height:1}
-.num .tsuki{left:-2px;top:14%}
-.num .kai{left:43%;bottom:5%;z-index:3;-webkit-text-stroke:5px #fff;paint-order:stroke fill}
-.num .ph{position:absolute;right:-34px;top:9%;width:min(60vw,290px);aspect-ratio:1/1.34;border-radius:999px;background:url(img/personal.jpg) 30% center/cover;box-shadow:0 18px 40px rgba(162,85,63,.25);border:5px solid #fff}
-.num .seal{position:absolute;left:-6px;bottom:7%;z-index:2;width:104px;height:104px;border-radius:50%;background:var(--mk);display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-10deg);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.num .tsuki{left:-2px;top:8%;z-index:2}
+.num .kai{left:71%;bottom:5%;z-index:3}
+.num .ph{position:absolute;right:-30px;top:5%;width:min(47vw,226px);aspect-ratio:1/1.3;border-radius:999px;background:url(img/stretch.jpg) 58% 30%/cover;box-shadow:0 18px 40px rgba(162,85,63,.25);border:5px solid #fff}
+.num .seal{position:absolute;right:-12px;top:-11%;z-index:4;width:96px;height:96px;border-radius:50%;background:var(--mk);display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(8deg);box-shadow:0 6px 16px rgba(0,0,0,.12)}
 .num .seal span{font-weight:700;font-size:14.5px;line-height:1.4;letter-spacing:.02em}
 .fv .en2{font-family:var(--en);font-weight:700;color:var(--accent);font-size:min(7.300vw,35px);line-height:1.1;transform:skewX(-10deg);transform-origin:0 100%;letter-spacing:.01em;margin-top:2px;white-space:nowrap}
 .fv .en2 small{display:block;font-size:.56em;white-space:nowrap;font-weight:500;color:var(--ink);letter-spacing:.04em;margin-top:6px}
@@ -202,8 +202,8 @@ footer b{display:block;font-family:var(--en);font-weight:600;font-size:22px;lett
   .js .num .ph{opacity:0;animation:ph 1s .75s cubic-bezier(.2,.8,.2,1) forwards}
   @keyframes ph{from{opacity:0;transform:translateX(70px) rotate(6deg)}to{opacity:1;transform:none}}
   .js .num .seal{animation:pop .7s 1.7s cubic-bezier(.3,1.7,.5,1) both,sway 4s 2.6s ease-in-out infinite}
-  @keyframes pop{from{transform:scale(0) rotate(-60deg);opacity:0}to{transform:scale(1) rotate(-10deg);opacity:1}}
-  @keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(-4deg) scale(1.04)}}
+  @keyframes pop{from{transform:scale(0) rotate(-60deg);opacity:0}to{transform:scale(1) rotate(8deg);opacity:1}}
+  @keyframes sway{0%,100%{transform:rotate(8deg)}50%{transform:rotate(2deg) scale(1.04)}}
   .js .tick div{animation:tick 22s linear infinite}
   @keyframes tick{to{transform:translateX(-50%) skewX(-10deg)}}
   .js .cta{animation:pulse 2.4s 2.6s ease-out infinite}
@@ -242,7 +242,7 @@ footer b{display:block;font-family:var(--en);font-weight:600;font-size:22px;lett
 
 <header class="fv" id="fv">
   <p class="tg"><span class="a" style="--d:100"><span class="mk">24時間ジムなのに、</span></span><span class="t2 a" style="--d:260">毎月パーソナル。</span></p>
-  <div class="num" role="img" aria-label="月1回。トレーナーと会員が1対1でトレーニングしている様子">
+  <div class="num" role="img" aria-label="月1回。トレーナーが会員に1対1で教えている様子">
     <div class="one" aria-hidden="true">1</div>
     <div class="tsuki" aria-hidden="true">月</div>
     <div class="kai" aria-hidden="true">回</div>
@@ -322,7 +322,7 @@ footer b{display:block;font-family:var(--en);font-weight:600;font-size:22px;lett
     <div class="circle"><div class="im"><img src="img/floor.jpg" alt="" loading="lazy"><span>女性専用</span></div><p>会員も<wbr>スタッフも<wbr>女性だけ。<wbr>人目を<wbr>気にせず<wbr>通えます。</p></div>
     <div class="circle"><div class="im"><img src="img/machine.jpg" alt="" loading="lazy" style="object-position:30% 20%"><span>豊富なマシン</span></div><p>はじめての方が<wbr>多い<wbr>お店。<wbr>使い方は<wbr>スタッフが<wbr>丁寧に<wbr>お伝えします。</p></div>
     <div class="circle"><div class="im"><img src="img/pilates.jpg" alt="" loading="lazy"><span>マシンピラティス</span></div><p>最大3名までの<wbr>少人数。<wbr>ジムと<wbr>同じ場所で<wbr>参加できます。</p></div>
-    <div class="circle"><div class="im"><img src="img/stretch.jpg" alt="" loading="lazy" style="object-position:70% 30%"><span>パーソナル併設</span></div><p>もっと<wbr>教わりたく<wbr>なったら、<wbr>回数を<wbr>増やすことも<wbr>できます。</p></div>
+    <div class="circle"><div class="im"><img src="img/personal.jpg" alt="" loading="lazy" style="object-position:30% 30%"><span>パーソナル併設</span></div><p>もっと<wbr>教わりたく<wbr>なったら、<wbr>回数を<wbr>増やすことも<wbr>できます。</p></div>
   </div>
 </div></section>
 
