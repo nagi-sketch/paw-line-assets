@@ -9,7 +9,7 @@
 <meta name="description" content="Paw 御経塚店は、月1回のマンツーマンパーソナルトレーニングとプライベートサウナが月会費に含まれる、女性専用の24時間ジムです。アークスクエア御経塚すぐ。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Poppins:wght@500;600&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <style>
 /* 書体はLINE（リッチメニュー・予約ページ）と同じ Noto Sans JP と Poppins。色も同じテラコッタ #BE6D55・クリーム #FFFAE8・文字 #2E2E2E */
 /* 第5版（2026-11-16）：大きな斜体の数字・英字の見出し・マーカー・STEPの流れ・丸い写真・番号つきQ&A。色はPawのテラコッタ＋クリーム、マーカーだけ黄色 */
@@ -18,6 +18,7 @@
   --accent:#BE6D55; --accent-d:#A2553F; --accent-soft:#F8E6DE; --mk:#FFE36E; --line:#EADFC8; --line-g:#06C755;
   --jp:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
   --en:"Poppins","Noto Sans JP",sans-serif;
+  --fv:"Big Shoulders Display","Arial Narrow","Noto Sans JP",sans-serif; /* 冒頭だけ：オーナー指定の版（11/16）の書体 */
   color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -47,19 +48,19 @@ h2.big{font-size:25px;font-weight:700;font-style:italic;line-height:1.5;text-ali
 
 /* 冒頭 */
 .fv{position:relative;padding:26px 22px 30px;overflow:hidden}
-.fv .tg{font-weight:700;font-style:italic;font-size:25px;line-height:1.5;letter-spacing:.02em}
+.fv .tg{font-weight:900;font-style:italic;font-size:25px;line-height:1.5;letter-spacing:.02em;color:#1F1B19}
 .fv .tg>span{display:table}
 .fv .tg .t2{color:var(--accent);font-size:27px;margin-top:2px}
-.num{position:relative;height:calc(min(62vw,298px) * 1.3315);margin-top:16px}
-.num .one{position:absolute;left:-1%;top:15%;z-index:1;font-family:var(--jp);font-weight:700;font-size:min(56vw,268px);line-height:.92;color:var(--accent);transform:skewX(-10deg);transform-origin:50% 100%;letter-spacing:-.02em}
-.num .tsuki,.num .kai{position:absolute;font-weight:700;font-style:italic;color:var(--accent);font-size:min(13vw,62px);line-height:1}
-.num .tsuki{left:-2px;top:2%;z-index:2}
-.num .kai{left:15%;bottom:1%;z-index:2}
-.num .ph{position:absolute;right:-22px;top:0;z-index:3;width:min(62vw,298px);aspect-ratio:1080/1438;border-radius:22px 0 0 22px;background:url(img/stretch.jpg) center/cover no-repeat;box-shadow:0 16px 34px rgba(120,60,42,.2)}
-.num .seal{position:absolute;right:-14px;top:calc(-1 * min(27vw,126px));z-index:5;width:84px;height:84px;border-radius:50%;background:var(--mk);display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(8deg);box-shadow:0 6px 16px rgba(0,0,0,.12)}
-.num .seal span{font-weight:700;font-size:12.5px;line-height:1.4;letter-spacing:.02em}
-.fv .en2{font-family:var(--en);font-weight:700;color:var(--accent);font-size:min(7.300vw,35px);line-height:1.1;transform:skewX(-10deg);transform-origin:0 100%;letter-spacing:.01em;margin-top:18px;white-space:nowrap}
-.fv .en2 small{display:block;font-size:.56em;white-space:nowrap;font-weight:500;color:var(--ink);letter-spacing:.04em;margin-top:6px}
+.num{position:relative;height:min(92vw,440px);margin-top:6px}
+.num .one{position:absolute;left:8%;top:-4%;z-index:1;font-family:var(--fv);font-weight:900;font-size:min(108vw,520px);line-height:.86;color:var(--accent);transform:skewX(-10deg);transform-origin:50% 100%;letter-spacing:-.02em}
+.num .tsuki,.num .kai{position:absolute;font-weight:900;font-style:italic;color:var(--accent);font-size:min(17vw,82px);line-height:1}
+.num .tsuki{left:-2px;top:14%;z-index:2}
+.num .kai{left:43%;bottom:5%;z-index:3;-webkit-text-stroke:5px #fff;paint-order:stroke fill}
+.num .ph{position:absolute;right:-34px;top:9%;z-index:2;width:min(60vw,290px);aspect-ratio:1/1.34;border-radius:999px;background:url(img/stretch.jpg) center/cover;box-shadow:0 18px 40px rgba(162,85,63,.25);border:5px solid #fff}
+.num .seal{position:absolute;left:-6px;bottom:7%;z-index:4;width:104px;height:104px;border-radius:50%;background:var(--mk);display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-10deg);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.num .seal span{font-weight:900;font-size:14.5px;line-height:1.4;letter-spacing:.02em;color:#1F1B19}
+.fv .en2{font-family:var(--fv);font-weight:900;color:var(--accent);font-size:min(10.600vw,51px);line-height:.95;transform:skewX(-10deg);transform-origin:0 100%;letter-spacing:.01em;margin-top:2px;white-space:nowrap}
+.fv .en2 small{display:block;font-size:.5em;white-space:nowrap;color:#1F1B19;letter-spacing:.04em;margin-top:6px}
 .fv .sub{margin-top:18px;font-size:15px;font-weight:500}
 
 /* 流れる帯 */
@@ -202,8 +203,8 @@ footer b{display:block;font-family:var(--en);font-weight:600;font-size:22px;lett
   .js .num .ph{opacity:0;animation:ph 1s .75s cubic-bezier(.2,.8,.2,1) forwards}
   @keyframes ph{from{opacity:0;transform:translateX(70px) rotate(6deg)}to{opacity:1;transform:none}}
   .js .num .seal{animation:pop .7s 1.7s cubic-bezier(.3,1.7,.5,1) both,sway 4s 2.6s ease-in-out infinite}
-  @keyframes pop{from{transform:scale(0) rotate(-60deg);opacity:0}to{transform:scale(1) rotate(8deg);opacity:1}}
-  @keyframes sway{0%,100%{transform:rotate(8deg)}50%{transform:rotate(2deg) scale(1.04)}}
+  @keyframes pop{from{transform:scale(0) rotate(-60deg);opacity:0}to{transform:scale(1) rotate(-10deg);opacity:1}}
+  @keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(-4deg) scale(1.04)}}
   .js .tick div{animation:tick 22s linear infinite}
   @keyframes tick{to{transform:translateX(-50%) skewX(-10deg)}}
   .js .cta{animation:pulse 2.4s 2.6s ease-out infinite}
@@ -241,7 +242,7 @@ footer b{display:block;font-family:var(--en);font-weight:600;font-size:22px;lett
 <div class="top"><img src="img/logo.png" alt="Paw women's fitness"><span>女性専用<i>|</i>24時間営業</span></div>
 
 <header class="fv" id="fv">
-  <p class="tg"><span class="a" style="--d:100"><span class="mk">24時間ジムなのに、</span></span><span class="t2 a" style="--d:260">毎月パーソナル。</span></p>
+  <p class="tg"><span class="a" style="--d:100"><span class="mk">24時間ジムなのに、</span></span><span class="t2 a" style="--d:260">毎月パーソナル付き。</span></p>
   <div class="num" role="img" aria-label="月1回。トレーナーが会員に1対1で教えている様子">
     <div class="one" aria-hidden="true">1</div>
     <div class="tsuki" aria-hidden="true">月</div>
