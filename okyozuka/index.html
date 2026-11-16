@@ -36,17 +36,30 @@ h2{font-size:25px;margin-top:8px}
 
 /* 冒頭 */
 .fv{position:relative}
-.fv .ph{aspect-ratio:4/4.3;background:url(img/machine.jpg) center 18%/cover}
+.fv .ph{position:relative;aspect-ratio:4/3.7}
+.fv .phi{position:absolute;inset:0;background:url(img/personal.jpg) 32% center/cover;transform-origin:40% 40%}
+.fv .ph{overflow:visible}
+.fv .ph:before{content:"";position:absolute;inset:0;overflow:hidden}
+.seal{position:absolute;right:14px;bottom:-40px;z-index:2;width:104px;height:104px;border-radius:50%;background:#fff;border:2.5px solid var(--accent);
+  box-shadow:0 0 0 5px #fff,0 6px 18px rgba(190,109,85,.28);display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-9deg)}
+.seal span{color:var(--accent-d);font-weight:700;font-size:15px;line-height:1.45;letter-spacing:.04em}
 .fv .logo{position:absolute;left:20px;top:20px;width:76px;background:rgba(255,255,255,.9);padding:9px;border-radius:8px}
-.fv .tx{padding:28px 24px 36px}
+.fv .tx{padding:26px 24px 36px}
+.fv{overflow:hidden}
 .tag{display:inline-block;background:var(--accent);color:#fff;font-weight:700;font-size:19px;line-height:1.5;letter-spacing:.08em;border-radius:10px;padding:10px 18px}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-.tile{background:var(--cream);border-radius:12px;padding:14px 12px 16px;display:flex;flex-direction:column;gap:6px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.tile{background:var(--cream);border-radius:12px;padding:14px 12px 16px;display:flex;flex-direction:column;gap:8px}
+.tile .top{display:flex;align-items:flex-end;justify-content:space-between;gap:4px}
+.tile .ic{width:52px;height:45px;color:var(--accent);flex:none}
 .tile .m{color:var(--accent);font-weight:700;font-size:17px;line-height:1;white-space:nowrap}
 .tile .m b{font-family:var(--en);font-weight:500;font-size:50px;margin:0 2px;position:relative;top:3px}
 .tile .l{font-weight:700;font-size:15px;line-height:1.5;letter-spacing:.02em}
 .pill{display:inline-block;border:1.5px solid var(--accent);color:var(--accent);font-size:13px;font-weight:500;letter-spacing:.12em;border-radius:999px;padding:3px 14px}
-h1{font-size:29px;margin-top:14px;line-height:1.5;letter-spacing:.03em}
+h1{margin-top:14px;letter-spacing:.02em}
+h1 .l1{display:block;font-size:24px;line-height:1.5}
+h1 .band{display:block;margin:10px -24px 0;padding:12px 24px 16px;background:var(--accent);color:#fff}
+h1 .l2{display:block;font-size:26px;line-height:1.3;letter-spacing:.08em}
+h1 .l3{display:block;font-size:min(calc((100vw - 48px) / 8.300),52px);line-height:1.3;white-space:nowrap}
 .fv .sub{font-size:16px;margin-top:16px;color:var(--ink)}
 .fv .sub b{font-weight:700}
 
@@ -81,6 +94,9 @@ h1{font-size:29px;margin-top:14px;line-height:1.5;letter-spacing:.03em}
 .cmp .me{background:#fff;color:var(--ink);font-weight:700;font-size:14.5px;border-left:2px solid var(--accent);border-right:2px solid var(--accent)}
 .cmp .h.me{background:var(--accent);color:#fff;border-radius:10px 10px 0 0;font-size:14.5px}
 .cmp .me.last{border-bottom:2px solid var(--accent);border-radius:0 0 10px 10px}
+.cmp .yen{font-size:12px;letter-spacing:0}
+.cmp .me.yen{font-size:15.5px}
+.cmp .me.yen small{display:block;font-size:11px;font-weight:500;color:var(--accent-d);line-height:1.4;margin-top:3px}
 /* 月1回でできること */
 .steps{display:flex;flex-direction:column;gap:0;margin-top:26px;counter-reset:s}
 .step{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
@@ -91,6 +107,8 @@ h1{font-size:29px;margin-top:14px;line-height:1.5;letter-spacing:.03em}
 .photo{border-radius:12px;overflow:hidden;margin-top:24px}
 .photo img{width:100%;aspect-ratio:3/2;object-fit:cover}
 
+.thumbs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.thumbs img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:10px}
 /* 理由 */
 .reasons{display:flex;flex-direction:column;gap:22px;margin-top:26px}
 .reason{display:grid;grid-template-columns:112px 1fr;gap:16px;align-items:center}
@@ -140,22 +158,56 @@ footer{padding:28px 24px 36px;text-align:center;font-size:12px;color:var(--muted
   padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
 .bar a{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:448px;background:var(--line-g);color:#fff;text-decoration:none;
   font-weight:700;font-size:16px;letter-spacing:.08em;border-radius:999px;padding:13px 16px}
+
+/* 動き（動きを減らす設定の端末と、スクリプトが動かない環境では、最初から全部見える） */
+@media (prefers-reduced-motion:no-preference){
+  .js .fv .a{opacity:0;transform:translateY(16px);animation:up .75s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d) * 1ms)}
+  @keyframes up{to{opacity:1;transform:none}}
+  .js .fv .phi{animation:zoom 7s ease-out both}
+  @keyframes zoom{from{transform:scale(1.14)}to{transform:scale(1)}}
+  .js h1 .band{background:linear-gradient(var(--accent),var(--accent)) left/0% 100% no-repeat;animation:wipe .65s .55s cubic-bezier(.6,0,.2,1) forwards}
+  @keyframes wipe{to{background-size:100% 100%}}
+  .js .seal{animation:pop .7s 1.9s cubic-bezier(.3,1.7,.5,1) both}
+  @keyframes pop{from{transform:scale(0) rotate(-50deg);opacity:0}to{transform:scale(1) rotate(-9deg);opacity:1}}
+  .js .tile .m b{display:inline-block;animation:bump .7s cubic-bezier(.3,1.8,.5,1) both;animation-delay:calc(var(--d) * 1ms + 350ms)}
+  @keyframes bump{from{transform:scale(.2)}to{transform:scale(1)}}
+  .js .tile .ic path,.js .tile .ic circle{stroke-dasharray:140;stroke-dashoffset:140;animation:draw 1.2s ease-out forwards;animation-delay:calc(var(--d) * 1ms + 450ms)}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .js .fv .cta{animation:up .75s cubic-bezier(.2,.7,.2,1) forwards,pulse 2.6s 3.4s ease-out infinite;animation-delay:calc(var(--d) * 1ms),3.4s}
+  @keyframes pulse{0%{box-shadow:0 4px 0 #04a546,0 0 0 0 rgba(6,199,85,.5)}70%,100%{box-shadow:0 4px 0 #04a546,0 0 0 16px rgba(6,199,85,0)}}
+  .js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 90ms)}
+  .js .rv.shown{opacity:1;transform:none}
+  .js .worry li:after{opacity:0;transition:opacity .25s;transition-delay:calc(var(--i,0) * 90ms + 450ms)}
+  .js .worry li.shown:after{opacity:1}
+  .js .step:before{transform:scale(0);transition:transform .5s cubic-bezier(.3,1.7,.5,1);transition-delay:calc(var(--i,0) * 90ms + 200ms)}
+  .js .step.shown:before{transform:none}
+  .js .cmp.shown .h.me{animation:glow 1.4s .5s ease-out}
+  @keyframes glow{0%{box-shadow:0 0 0 0 rgba(190,109,85,.55)}100%{box-shadow:0 0 0 18px rgba(190,109,85,0)}}
+  .js .photo img,.js .thumbs img{transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+  .js .photo.rv img,.js .thumbs.rv img{transform:scale(1.08)}
+  .js .photo.rv.shown img,.js .thumbs.rv.shown img{transform:none}
+  .js .bar{transform:translateY(110%);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  .js .bar.on{transform:none}
+}
 </style>
+<script>document.documentElement.className+=" js";</script>
 </head>
 <body>
 
 <header class="fv">
-  <div class="ph" role="img" aria-label="トレーナーがマシンの使い方を教えている様子"></div>
+  <div class="ph" role="img" aria-label="トレーナーと会員が1対1でトレーニングしている様子"><div class="phi"></div>
+    <div class="seal" aria-hidden="true"><span>月会費に<br>含まれます</span></div>
+  </div>
   <img class="logo" src="img/logo.png" alt="Paw women's fitness">
   <div class="tx">
-    <span class="pill">女性専用・24時間ジム</span>
-    <h1>24時間ジムなのに、<br><span class="mark">毎月パーソナル付き。</span></h1>
+    <span class="pill a" style="--d:100">女性専用・24時間ジム</span>
+    <h1><span class="l1 a" style="--d:250">24時間ジムなのに、</span><span class="band"><span class="l2 a" style="--d:800">毎月、</span><span class="l3 a" style="--d:950">パーソナル付き。</span></span></h1>
     <div class="tiles">
-      <div class="tile"><div class="m">月<b>1</b>回</div><div class="l">マンツーマン<br>パーソナル<br>トレーニング</div></div>
-      <div class="tile"><div class="m">月<b>1</b>回</div><div class="l">プライベート<br>サウナ<br>（貸切）</div></div>
+      <div class="tile a" style="--d:1300"><div class="top"><div class="m">月<b>1</b>回</div><svg class="ic" viewBox="0 0 56 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="11" r="5.5"/><path d="M6 40V30c0-6 5-10 11-10s11 4 11 10v10"/><circle cx="40" cy="15" r="4.5"/><path d="M32 40v-8c0-5 3.500-8 8-8s8 3 8 8v8"/><path d="M24 30h12M22.500 27v6M37.500 27v6"/></svg></div><div class="l">マンツーマン<br>パーソナル<br>トレーニング</div></div>
+      <div class="tile a" style="--d:1450"><div class="top"><div class="m">月<b>1</b>回</div><svg class="ic" viewBox="0 0 56 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 5c-3 4 3 6 0 10M28 3c-3 4 3 6 0 10M38 5c-3 4 3 6 0 10"/><path d="M6 26h44M6 26v6h44v-6M12 32v11M44 32v11M12 39h32"/></svg></div><div class="l">プライベート<br>サウナ<br>（貸切）</div></div>
     </div>
-    <p class="sub"><b>どちらも、<wbr>月会費に<wbr>含まれています。</b><br>ひとりで<wbr>頑張らなくていい、<wbr>女性専用の<wbr>24時間ジムです。</p>
-    <a class="cta" href="https://line.me/R/ti/p/@818ttfdk"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11.1c0 4 3.5 7.300 8.300 8 .3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.6 1.100-.5 5.800-3.400 7.900-5.900 1.400-1.600 2.100-3.200 2.100-5.100C22 6.600 17.500 3 12 3z"/></svg>LINEで<wbr>体験を<wbr>予約する</a>
+    <p class="sub a" style="--d:1650"><b>どちらも、<wbr>月会費に<wbr>含まれています。</b><br>ひとりで<wbr>頑張らなくていい、<wbr>女性専用の<wbr>24時間ジムです。</p>
+    <a class="cta a" style="--d:1800" href="https://line.me/R/ti/p/@818ttfdk"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11.1c0 4 3.5 7.300 8.300 8 .3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.6 1.100-.5 5.800-3.400 7.900-5.900 1.400-1.600 2.100-3.200 2.100-5.100C22 6.600 17.500 3 12 3z"/></svg>LINEで<wbr>体験を<wbr>予約する</a>
     <p class="cta-note">Paw 御経塚店<wbr>（アークスクエア御経塚すぐ）<br>体験は<wbr>45分。<wbr>運動が<wbr>はじめての方も<wbr>お気軽に<wbr>どうぞ。</p>
   </div>
 </header>
@@ -179,10 +231,10 @@ footer{padding:28px 24px 36px;text-align:center;font-size:12px;color:var(--muted
     <div class="h"></div><div class="h">一般的な<br>24時間<br>ジム</div><div class="h">パーソ<br>ナル<br>ジム</div><div class="h me">Paw<br>御経塚店</div>
     <div class="k">通う<br>時間</div><div>好きな<br>時間</div><div>予約<br>した日時</div><div class="me">好きな時間<br>（24時間）</div>
     <div class="k">教わる</div><div>自分で<br>進める</div><div>毎回<br>1対1</div><div class="me">月1回<br>1対1で<br>教わる</div>
-    <div class="k">費用</div><div>月会費</div><div>回数に<br>応じた<br>費用</div><div class="me">月会費に<br>含まれる</div>
+    <div class="k">料金の<br>めやす</div><div class="yen">月 約3,300<br>〜7,700円</div><div class="yen">月4回で<br>約2.6万<br>〜3.8万円</div><div class="me yen"><span>月9,680円<small>月1回の<br>パーソナル込み</small></span></div>
     <div class="k">サウナ</div><div>—</div><div>—</div><div class="me last">貸切を<br>月1回</div>
   </div>
-  <p class="small" style="margin-top:12px">一般的な<wbr>例との<wbr>比較です。</p>
+  <p class="small" style="margin-top:12px">一般的な<wbr>例との<wbr>比較です。<wbr>料金の<wbr>めやすは、<wbr>近隣の<wbr>各店の<wbr>公式サイトの<wbr>表示を<wbr>もとにした<wbr>当店調べ（2026年11月・<wbr>税込）。<wbr>Paw 御経塚店は、<wbr>24時間<wbr>使える<wbr>レギュラー会員の<wbr>月会費です。</p>
 </div></section>
 
 <section class="cream"><div class="in">
@@ -201,6 +253,7 @@ footer{padding:28px 24px 36px;text-align:center;font-size:12px;color:var(--muted
   <div class="eb">PRIVATE SAUNA</div>
   <h2>もうひとつ、<wbr>毎月。<br>プライベートサウナ。</h2>
   <div class="photo"><img src="img/sauna.jpg" alt="Paw 御経塚店の貸切サウナ" loading="lazy"></div>
+  <div class="thumbs"><img src="img/sauna_room.jpg" alt="サウナ室の中" loading="lazy"><img src="img/sauna_view.jpg" alt="サウナ室の窓" loading="lazy"></div>
   <p class="lead" style="color:var(--ink)">会員の方は、<wbr>貸切の<wbr>サウナを<wbr><b class="mark">月1回、<wbr>ご利用<wbr>いただけます</b>。</p>
   <p class="lead">トレーニングの<wbr>あとに、<wbr>人目を<wbr>気にせず<wbr>ゆっくり<wbr>温まる時間を。<wbr>鍛える日も、<wbr>ひと息つく日も、<wbr>ここで<wbr>過ごせます。</p>
   <p class="small" style="margin-top:14px">ご予約制です。</p>
@@ -232,14 +285,13 @@ footer{padding:28px 24px 36px;text-align:center;font-size:12px;color:var(--muted
     <div class="h">11月の<wbr>入会特典<wbr>（11月30日まで）</div>
     <ul><li>初期費用<wbr>0円<wbr>（入会金・<wbr>事務手数料）</li><li>グループレッスン<wbr>チケット<wbr>1枚<wbr>プレゼント</li></ul>
   </div>
-  <p class="more">もっと<wbr>教わりたい<wbr>方には、<wbr>パーソナル<wbr>月2回<wbr>（12,540円）・<wbr>月4回<wbr>（23,760円）の<wbr>プランも<wbr>あります。<wbr>体験の<wbr>ときに、<wbr>あなたに<wbr>合う<wbr>通い方を<wbr>ご提案します。</p>
 </div></section>
 
 <section class="cream"><div class="in">
   <div class="eb">TRIAL</div>
   <h2>体験の<wbr>流れ<wbr>（45分）</h2>
   <div class="flow">
-    <div><b>① お話</b><span>なりたい体や、<wbr>気になることを<wbr>聞かせてください。</span></div>
+    <div><b>① カウンセリング</b><span>なりたい体や、<wbr>気になることを<wbr>聞かせてください。</span></div>
     <div><b>② 体験</b><span>マシンや<wbr>ピラティスを、<wbr>スタッフと<wbr>一緒に<wbr>動かしてみます。</span></div>
     <div><b>③ 通い方の<wbr>ご提案</b><span>あなたに<wbr>合う<wbr>プランを<wbr>お伝えします。</span></div>
   </div>
@@ -280,5 +332,26 @@ footer{padding:28px 24px 36px;text-align:center;font-size:12px;color:var(--muted
 <footer>© Paw women's fitness</footer>
 
 <div class="bar"><a href="https://line.me/R/ti/p/@818ttfdk"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11.1c0 4 3.5 7.300 8.300 8 .3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.6 1.100-.5 5.800-3.400 7.900-5.900 1.400-1.600 2.100-3.200 2.100-5.100C22 6.600 17.500 3 12 3z"/></svg>LINEで<wbr>体験を<wbr>予約する</a></div>
+<script>
+(function(){
+  var sel=".eb,h2,.lead,.worry li,.answer,.cmp,.photo,.thumbs,.step,.reason,.plan,.offer,.flow div,.faq details,.shop,.last .cta";
+  var els=[].slice.call(document.querySelectorAll("section "+sel));
+  els.forEach(function(e){
+    e.classList.add("rv");
+    var i=0,p=e.previousElementSibling;
+    while(p&&i<6){i++;p=p.previousElementSibling}
+    if(/worry|step|reason|plan|flow|faq/.test(e.parentNode.className||"")||e.tagName==="LI")e.style.setProperty("--i",i);
+  });
+  function show(e){e.classList.add("shown")}
+  if(!("IntersectionObserver" in window)){els.forEach(show)}
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){show(x.target);io.unobserve(x.target)}})},{threshold:.12,rootMargin:"0px 0px -5% 0px"});
+    els.forEach(function(e){io.observe(e)});
+  }
+  var bar=document.querySelector(".bar");
+  function onScroll(){if(bar)bar.classList.toggle("on",(window.pageYOffset||document.documentElement.scrollTop)>420)}
+  window.addEventListener("scroll",onScroll,{passive:true});onScroll();
+})();
+</script>
 </body>
 </html>
